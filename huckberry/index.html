@@ -1,1 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huckberry Product Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F4F1EC;
+  --dark: #1D2B39;
+  --accent: #AD5E34;
+  --olive: #4A5740;
+  --sand: #C8B99A;
+  --warm-grey: #7A7670;
+  --card-bg: #FAFAF8;
+  --border: #E0D9D0;
+  --sidebar-w: 220px;
+}
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #F4F1EC;
+  color: var(--dark);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Layout ── */
+.app {
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 10;
+  border-right: 3px solid var(--accent);
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid #253444;
+}
+
+.sidebar-logo h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.15rem;
+  color: var(--cream);
+  line-height: 1.3;
+}
+
+.sidebar-logo span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--warm-grey);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
+}
+
+.nav {
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #3D4F5C;
+  padding: 0 24px 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.12s;
+  border-left: 3px solid transparent;
+  color: #8C8070;
+  font-size: 0.88rem;
+  font-weight: 500;
+  user-select: none;
+}
+
+.nav-item:hover {
+  background: #243342;
+  color: var(--cream);
+}
+
+.nav-item.active {
+  background: #243342;
+  color: var(--cream);
+  border-left-color: #AD5E34;
+}
+
+.nav-icon {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding: 20px 24px;
+  border-top: 1px solid #253444;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: #3D4F5C;
+  letter-spacing: 0.06em;
+}
+
+/* ── Main content ── */
+.main-content {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 36px 36px 60px;
+  max-width: 960px;
+}
+
+.page-section { display: none; }
+
+.section-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.5rem;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+.section-subtitle {
+  font-size: 0.85rem;
+  color: var(--warm-grey);
+  margin-bottom: 28px;
+}
+
+/* ── Stats ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.stat-card.bestsellers::before { background: #8B6914; }
+.stat-card.sale::before { background: var(--accent); }
+.stat-card.new::before { background: var(--olive); }
+.stat-card.total::before { background: var(--dark); }
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm-grey);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark);
+  line-height: 1;
+}
+
+.stat-sub {
+  font-size: 0.72rem;
+  color: var(--warm-grey);
+  margin-top: 4px;
+}
+
+/* ── Panels ── */
+.panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  background: var(--dark);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.panel-body { padding: 20px; }
+
+/* ── Prompt grid ── */
+.prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.prompt-btn {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.prompt-btn:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+.prompt-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.prompt-btn-label {
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.prompt-btn-text { font-size: 0.8rem; font-weight: 500; line-height: 1.3; }
+
+/* ── Response ── */
+.response-panel {
+  background: #1D2B39;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 16px;
+  display: none;
+}
+
+.response-panel.visible { display: block; }
+
+.response-header {
+  padding: 11px 20px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.response-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.response-dot.done { animation: none; background: var(--olive); }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.response-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.response-body {
+  padding: 22px;
+  color: #E8E0D0;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  min-height: 60px;
+}
+
+/* ── Charts ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.brand-chart { padding: 18px; }
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 11px;
+}
+
+.brand-name {
+  width: 130px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-bar-wrap {
+  flex: 1;
+  height: 9px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.brand-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.brand-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--warm-grey);
+  width: 24px;
+  text-align: right;
+}
+
+/* ── Data table ── */
+.filter-row {
+  padding: 12px 18px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 5px 13px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.12s;
+  color: var(--dark);
+}
+
+.filter-btn:hover { background: var(--sand); }
+.filter-btn.active { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+.filter-btn.sale-active { background: var(--accent); color: white; border-color: var(--accent); }
+.filter-btn.new-active { background: var(--olive); color: white; border-color: var(--olive); }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+
+thead tr { background: var(--dark); }
+
+th {
+  padding: 10px 13px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sand);
+  font-weight: 400;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+th:hover { color: white; }
+
+td {
+  padding: 9px 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(180,160,120,0.08); }
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 2px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-bestseller { background: #EDE0C4; color: #6B4E00; }
+.badge-sale { background: #F5D5C5; color: #7A3018; }
+.badge-new { background: #D4E2CC; color: #2A4020; }
+
+.cat-pill {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.cat-bestsellers { background: #F0E8D0; color: #5C4400; }
+.cat-sale { background: #F5D5C5; color: #7A3018; }
+.cat-new { background: #D4E2CC; color: #2A4020; }
+
+.price-tag { font-family: 'DM Mono', monospace; font-size: 0.8rem; font-weight: 500; }
+
+.product-link { color: var(--dark); text-decoration: none; font-weight: 500; }
+.product-link:hover { color: var(--accent); text-decoration: underline; }
+
+.sort-arrow { margin-left: 3px; opacity: 0.5; }
+.sort-arrow.active { opacity: 1; }
+
+.empty-state { padding: 36px; text-align: center; color: var(--warm-grey); font-size: 0.85rem; }
+
+/* ── Radar ── */
+.radar-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.radar-canvas-wrap {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid var(--border);
+}
+
+.radar-legend {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  color: var(--warm-grey);
+  font-family: 'DM Mono', monospace;
+}
+
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+.reco-list {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.reco-card {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 13px 15px;
+  background: var(--cream);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.reco-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+
+.reco-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+
+.reco-card.tier-1::before { background: var(--accent); }
+.reco-card.tier-2::before { background: #8B6914; }
+.reco-card.tier-3::before { background: var(--olive); }
+
+.reco-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.reco-brand { font-family: 'Libre Baskerville', serif; font-size: 0.95rem; font-weight: 600; }
+
+.reco-score {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  background: var(--dark);
+  color: var(--sand);
+}
+
+.reco-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 7px; }
+
+.reco-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: var(--border);
+  color: var(--warm-grey);
+}
+
+.reco-rationale { font-size: 0.77rem; color: var(--warm-grey); line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .sidebar { width: 180px; }
+  .main-content { margin-left: 180px; padding: 24px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .radar-grid { grid-template-columns: 1fr; }
+  .prompt-grid { grid-template-columns: 1fr 1fr; }
+}
+
+  .back-to-portfolio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    padding: 14px 20px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    margin-bottom: 4px;
+    transition: color 0.15s;
+  }
+  .back-to-portfolio:hover { color: rgba(255,255,255,0.85); }
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <a href="/" class="back-to-portfolio">← Portfolio</a>
+    <div class="sidebar-logo">
+      <h1>Huckberry Product Intelligence</h1>
+      <span>March 2026</span>
+    </div>
+    <div class="nav">
+      <div class="nav-label">Navigation</div>
+      <div class="nav-item active" data-section="overview" onclick="navigateTo('overview')">
+        Overview
+      </div>
+      <div class="nav-item" data-section="data" onclick="navigateTo('data')">
+        Product Data
+      </div>
+      <div class="nav-item" data-section="recommendations" onclick="navigateTo('recommendations')">
+        Brand Radar
+      </div>
+    </div>
+    <div class="sidebar-footer">Powered by Claude AI</div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main-content">
+
+    <!-- OVERVIEW -->
+    <div class="page-section" id="section-overview">
+      <div class="section-title">Product Overview</div>
+      <div class="section-subtitle">Key metrics and AI-powered analysis of Huckberry's current assortment.</div>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">⚡ Select a Question to Analyze</span>
+        </div>
+        <div class="panel-body">
+          <div class="prompt-grid" id="promptGrid"></div>
+          <div class="response-panel" id="responsePanel">
+            <div class="response-header">
+              <div class="response-dot" id="responseDot"></div>
+              <span class="response-label" id="responseLabel">Claude is analyzing...</span>
+            </div>
+            <div class="response-body" id="responseBody"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Brand Distribution</span></div>
+          <div class="brand-chart" id="brandChart"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">Product Type Mix</span></div>
+          <div class="brand-chart" id="typeChart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA -->
+    <div class="page-section" id="section-data">
+      <div class="section-title">Product Data</div>
+      <div class="section-subtitle">All 47 SKUs across Best Sellers, Sale, and New Arrivals. Click headers to sort.</div>
+
+      <div class="panel">
+        <div class="filter-row" id="filterRow"></div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state" id="emptyState" style="display:none">No products match this filter.</div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="page-section" id="section-recommendations">
+      <div class="section-title">Brand Expansion Radar</div>
+      <div class="section-subtitle">Portfolio gap analysis — recommended brands based on current assortment whitespace.</div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">🧭 Fit Score by Dimension</span></div>
+        <div class="radar-grid">
+          <div class="radar-canvas-wrap">
+            <canvas id="radarCanvas" width="340" height="340"></canvas>
+            <div class="radar-legend" id="radarLegend"></div>
+          </div>
+          <div class="reco-list" id="recoList"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+const PRODUCTS = [{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Oxford Draftsman Shirt","Color":"Classic White","Product Type":"Long Sleeve Shirts","Price ($)":98,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/flint-and-tinder/category/p/86127-classic-oxford-shirt"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Oxford Draftsman Shirt","Color":"Dark Navy","Product Type":"Long Sleeve Shirts","Price ($)":98,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/flint-and-tinder/category/p/91805-classic-oxford"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Oxford Draftsman Shirt","Color":"Classic Blue","Product Type":"Long Sleeve Shirts","Price ($)":98,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/flint-and-tinder/category/p/94181-classic-oxford"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"365 5-Pocket Pant - HB Athletic Tapered","Color":"Military Olive","Product Type":"5 Pocket Pants","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/84411-365-pant-athletic-tapered"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"365 5-Pocket Pant - HB Straight","Color":"Earth","Product Type":"5 Pocket Pants","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/58172-365-pant-straight"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"365 5-Pocket Pant - HB Straight","Color":"Charcoal","Product Type":"5 Pocket Pants","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/58171-365-pant-straight"},{"Category":"Best Sellers","Brand":"Astorflex","Product Name":"Patnoflex Travel Loafer","Color":"Dark Chestnut Nubuck","Product Type":"Loafers","Price ($)":225,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Back In Stock","URL":"https://huckberry.com/store/astorflex/category/p/93508-patnoflex-travel-2-loafer"},{"Category":"Best Sellers","Brand":"Astorflex","Product Name":"Patnoflex Travel Loafer","Color":"Tan","Product Type":"Loafers","Price ($)":225,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/astorflex/category/p/93509-patnoflex-travel-2-loafer"},{"Category":"Best Sellers","Brand":"Astorflex","Product Name":"Patnoflex Travel Loafer","Color":"Tobacco Suede","Product Type":"Loafers","Price ($)":225,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/astorflex/category/p/97051-patnoflex-travel-2-loafer"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Vintage Soft Wash T-Shirt","Color":"Black","Product Type":"T Shirts","Price ($)":44,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 3, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/85622-vintage-soft-wash-t-shirt"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Vintage Soft Wash T-Shirt","Color":"White","Product Type":"T Shirts","Price ($)":44,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 3, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/85623-vintage-soft-wash-t-shirt"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Vintage Soft Wash T-Shirt","Color":"Balsam Green","Product Type":"T Shirts","Price ($)":44,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 3, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/85621-vintage-soft-wash-t-shirt"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Stretch Selvedge Denim - HB Classic","Color":"Light Wash","Product Type":"Jeans","Price ($)":118,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/91236-stretch-selvedge-denim-hb-classic"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Stretch Selvedge Denim - HB Straight","Color":"Rinsed Black","Product Type":"Stretch","Price ($)":118,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/flint-and-tinder/category/p/96111-stretch-selvedge-denim-hb-straight"},{"Category":"Best Sellers","Brand":"Flint and Tinder","Product Name":"Stretch Selvedge Denim - HB Athletic Straight","Color":"Medium Wash","Product Type":"Stretch","Price ($)":118,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/flint-and-tinder/category/p/96116-stretch-selvedge-denim-hb-athletic-straight"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Realtree\u00ae Mason Canvas Work Jacket","Color":"Realtree\u00ae Camo","Product Type":"Trucker Jackets","Price ($)":114,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/92550-mason-jacket"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Italian Moleskin Shirt Jacket","Color":"Black Coffee","Product Type":"Quilted Jackets","Price ($)":134,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/91998-quilted-moleskin-shirt-jacket"},{"Category":"Sale","Brand":"Wills","Product Name":"EasyCash Merino Long Sleeve Polo","Color":"Navy","Product Type":"Sweater Polos","Price ($)":112,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/wills/category/p/91892-easycash-long-sleeve-polo"},{"Category":"Sale","Brand":"Wills","Product Name":"EasyCash Merino Crewneck Sweater","Color":"Wood Grain","Product Type":"Crew Neck Sweaters","Price ($)":124,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/wills/category/p/94592-easycash-crewneck-sweater"},{"Category":"Sale","Brand":"Wills","Product Name":"EasyCash Merino Quarter Zip Sweater","Color":"Navy","Product Type":"Cashmere Sweaters","Price ($)":112,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/wills/category/p/94136-easycash-quarter-zip-sweater"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"10-Year Full Zip Hoodie","Color":"Black","Product Type":"Full Zip Hoodies","Price ($)":84,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/94353-10-year-full-zip-hoodie-2-0"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"10-Year Full Zip Hoodie","Color":"Mid Heather Grey","Product Type":"Full Zip Hoodies","Price ($)":84,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/94354-10-year-full-zip-hoodie-2-0"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"10-Year Full Zip Hoodie","Color":"Navy","Product Type":"Full Zip Hoodies","Price ($)":100,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/94356-10-year-full-zip-hoodie-2-0"},{"Category":"Sale","Brand":"Relwen","Product Name":"Windzip Jacket - Exclusive","Color":"Camo Fade","Product Type":"Insulated Jackets","Price ($)":187,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/relwen/category/p/66702-windzip-jacket-exclusive"},{"Category":"Sale","Brand":"Timex","Product Name":"Huckberry x TIMEX 1979  Black Max","Color":"Black","Product Type":"Field Watches","Price ($)":124,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/timex/category/p/93850-huckberry-x-timex-1979-black-max"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"365 Chino Pant - HB Classic","Color":"Khaki","Product Type":"Casual Pants","Price ($)":81,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/89711-365-chino-pant-classic"},{"Category":"Sale","Brand":"Huckberry","Product Name":"Made in USA Watch Cap Beanie","Color":"Neon Yellow","Price ($)":17,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/huckberry/category/p/95732-made-in-usa-watch-cap-beanie"},{"Category":"Sale","Brand":"Relwen","Product Name":"Quilted Insulated Tanker Jacket - Exclusive","Color":"Dark Loden","Product Type":"Winter Jackets","Price ($)":222,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/relwen/category/p/80904-quilted-insulated-tanker-jacket"},{"Category":"Sale","Brand":"Wills","Product Name":"Trench Coat","Color":"Taupe","Product Type":"Winter Jackets","Price ($)":119,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/wills/category/p/92148-trench-coat"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Stretch Selvedge Denim - HB Straight","Color":"Rinse","Product Type":"Jeans","Price ($)":94,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/87290-stretch-selvedge-denim-straight"},{"Category":"Sale","Brand":"Sperry","Product Name":"One Of These Days x Sperry Tony Moc Boot","Color":"Chocolate Leather","Product Type":"Chukka Boots","Price ($)":189,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/sperry/category/p/94675-one-of-these-days-x-sperry-tony-moc-boot"},{"Category":"Sale","Brand":"Filson","Product Name":"Spokane Insulated Cruiser Jacket","Color":"Red/Black Plaid","Product Type":"Shirt Jackets","Price ($)":336,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/filson/category/p/93096-spokane-insulated-cruiser-jacket"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Waxed Canvas Tote","Color":"Sea Kelp Camo","Product Type":"Tote Bags","Price ($)":112,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/95734-halley-stevenson-kelp-camo-tote"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Sherpa-Lined Trucker Jacket","Color":"Mid Stone Wash","Product Type":"Denim Jackets","Price ($)":99,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/93495-sherpa-lined-trucker-jacket"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"365 5-Pocket Pant - HB Athletic Tapered","Color":"Chocolate","Product Type":"Casual Pants","Price ($)":86,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Buy 2, Save 15%","URL":"https://huckberry.com/store/flint-and-tinder/category/p/86533-365-pant-athletic-tapered"},{"Category":"Sale","Brand":"Flint and Tinder","Product Name":"Retro Pile Fleece Jacket","Color":"Brown Diamond","Product Type":"Fleece Jackets","Price ($)":99,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/flint-and-tinder/category/p/95032-retro-pile-fleece-jacket"},{"Category":"Sale","Brand":"Wills","Product Name":"AloeKnit Polo Shirt","Color":"Taupe","Product Type":"Polo Shirts","Price ($)":31,"Original Price ($)":null,"Discount (%)":null,"On Sale":"Yes","Badge":"Add'l 15% Off At Cart","URL":"https://huckberry.com/store/wills/category/p/94521-aloeknit-polo-shirt"},{"Category":"New Arrivals","Brand":"Proof","Product Name":"Type 2 Training T-Shirt","Color":"Black","Product Type":"Active Tops","Price ($)":58,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/proof/category/p/96794-type-2-training-t-shirt"},{"Category":"New Arrivals","Brand":"Danner","Product Name":"Proof x Danner MTN45 Low","Color":"Nacreous Clouds","Product Type":"Sneakers","Price ($)":220,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/danner/category/p/97468-proof-x-danner-mtn45-low"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Flyweight Flex Blazer","Color":"British Khaki","Product Type":"Blazers","Price ($)":298,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/82185-flyweight-flex-blazer"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"M-51 Lightweight Cargo Pant - Exclusive","Color":"Desert Khaki","Product Type":"Workwear Pants","Price ($)":228,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/93407-m-51-lightweight-cargo-pant"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Sailcloth Tanker Jacket","Color":"Muted Olive","Product Type":"Jackets","Price ($)":288,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/84506-sailcloth-tanker-jacket"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Cotton Linen Sweater Crew","Color":"White/Navy Twist","Product Type":"Crew Neck Sweaters","Price ($)":148,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/relwen/category/p/97257-cotton-linen-sweater-crew"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Pac-Away Shell","Color":"Dark Forest","Product Type":"Active Jackets","Price ($)":338,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":null,"URL":"https://huckberry.com/store/relwen/category/p/97238-pac-away-shell"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Pique Slot Polo","Color":"Pumice","Product Type":"Polo Shirts","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/90538-pique-slot-polo"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Pique Slot Polo","Color":"Pale Pink","Product Type":"Polo Shirts","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/90537-pique-slot-polo"},{"Category":"New Arrivals","Brand":"Relwen","Product Name":"Pique Slot Polo","Color":"Marine Blue","Product Type":"Polo Shirts","Price ($)":108,"Original Price ($)":null,"Discount (%)":null,"On Sale":"No","Badge":"Bestseller","URL":"https://huckberry.com/store/relwen/category/p/78804-pique-slot-polo"}];
+
+const PRESET_PROMPTS = [
+  { label: "Brand Strategy", text: "Which brands dominate and what does that say about Huckberry's sourcing strategy?" },
+  { label: "Pricing Analysis", text: "Analyze the price distribution across categories. What does this tell us about their target customer?" },
+  { label: "Sale Inventory", text: "What patterns do you see in the sale items? What might this indicate about inventory planning?" },
+  { label: "New vs Core", text: "Compare New Arrivals vs Best Sellers. What's changing in their product direction?" },
+  { label: "Margin Opportunities", text: "Where are the biggest opportunities to improve margin based on this product data?" },
+  { label: "Board Summary", text: "Write a 3-bullet executive summary of product performance I could present to a board." },
+];
+
+
+// ─── Brand Expansion Radar ────────────────────────────────────────────────────
+
+const RECOMMENDATIONS = [
+  {
+    brand: "Patagonia",
+    tier: 1,
+    score: "96 / 100",
+    tags: ["Outerwear", "Sustainability", "Premium"],
+    rationale: "The single biggest portfolio gap. Huckberry's outdoor customer already buys Patagonia elsewhere. Adding even a curated capsule — R1 fleeces, Baggies, Torrentshell — would drive high-AOV transactions and signal serious outdoor credibility.",
+    dimensions: [95, 90, 85, 80, 92]
+  },
+  {
+    brand: "Merrell",
+    tier: 1,
+    score: "91 / 100",
+    tags: ["Footwear", "Trail", "Mid-Price"],
+    rationale: "Huckberry's footwear is thin: Astorflex loafers and Danner collab at the top, nothing in the $100–$160 trail/hiking sweet spot. Merrell's Moab and Speed Goat lines fill this gap cleanly and align with the adventure-ready positioning.",
+    dimensions: [88, 85, 92, 75, 90]
+  },
+  {
+    brand: "Buck Mason",
+    tier: 2,
+    score: "84 / 100",
+    tags: ["Basics", "American-Made", "Competitive"],
+    rationale: "Direct competitor to Flint and Tinder in premium American basics ($40–$90 tees, henleys, chinos). Adding Buck Mason would diversify the core basics assortment and reduce single-brand revenue concentration risk — but cannibalization risk is real.",
+    dimensions: [80, 92, 70, 88, 75]
+  },
+  {
+    brand: "Cotopaxi",
+    tier: 2,
+    score: "81 / 100",
+    tags: ["Outdoor", "Color", "Gen-Z"],
+    rationale: "Fills the colorful, mission-driven outdoor gap Huckberry currently ignores. The Del Día collection and Allpa bags have strong DTC and gifting appeal. Lower average price ($80–$160) would also attract a younger customer cohort.",
+    dimensions: [78, 72, 88, 82, 85]
+  },
+  {
+    brand: "Seiko",
+    tier: 2,
+    score: "78 / 100",
+    tags: ["Watches", "Accessible Luxury", "Heritage"],
+    rationale: "The Huckberry x Timex collab on sale suggests the watch category is underleveraged. Seiko's $150–$400 mechanical watches (Presage, 5 Sports) would complement the existing collab and build out accessories as a margin-accretive category.",
+    dimensions: [75, 88, 65, 90, 72]
+  },
+  {
+    brand: "Vuori",
+    tier: 3,
+    score: "71 / 100",
+    tags: ["Activewear", "Premium", "Fast-Growing"],
+    rationale: "The Proof training tee in New Arrivals signals Huckberry testing activewear. Vuori ($68–$98 joggers, shorts, tees) is the obvious next step — premium, lifestyle-adjacent, and one of the fastest-growing DTC brands in menswear.",
+    dimensions: [70, 75, 80, 68, 65]
+  }
+];
+
+const RADAR_AXES = ["Customer Fit", "Margin Potential", "Portfolio Gap", "Brand Equity", "Competitive Moat"];
+
+const TIER_COLORS = {
+  1: '#AD5E34',
+  2: '#8B6914',
+  3: '#4A5740'
+};
+
+function drawRadar() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 180, cy = 185, r = 130;
+  const axes = RADAR_AXES.length;
+  const angleStep = (2 * Math.PI) / axes;
+  const startAngle = -Math.PI / 2;
+
+  ctx.clearRect(0, 0, 360, 370);
+
+  // Background rings
+  for (let ring = 1; ring <= 5; ring++) {
+    ctx.beginPath();
+    for (let i = 0; i < axes; i++) {
+      const angle = startAngle + i * angleStep;
+      const pr = (ring / 5) * r;
+      const x = cx + pr * Math.cos(angle);
+      const y = cy + pr * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = ring === 5 ? '#DDD4C0' : '#EDE6D8';
+    ctx.lineWidth = ring === 5 ? 1.5 : 1;
+    ctx.stroke();
+    if (ring % 2 === 0) {
+      ctx.fillStyle = 'rgba(220,210,190,0.12)';
+      ctx.fill();
+    }
+  }
+
+  // Axis lines + labels
+  for (let i = 0; i < axes; i++) {
+    const angle = startAngle + i * angleStep;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx + r * Math.cos(angle), cy + r * Math.sin(angle));
+    ctx.strokeStyle = '#DDD4C0';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    const labelR = r + 22;
+    const lx = cx + labelR * Math.cos(angle);
+    const ly = cy + labelR * Math.sin(angle);
+    ctx.fillText(RADAR_AXES[i], lx, ly);
+  }
+
+  // Plot each recommendation
+  RECOMMENDATIONS.forEach((rec, ri) => {
+    const color = TIER_COLORS[rec.tier];
+    const points = rec.dimensions.map((val, i) => {
+      const angle = startAngle + i * angleStep;
+      const pr = (val / 100) * r;
+      return { x: cx + pr * Math.cos(angle), y: cy + pr * Math.sin(angle) };
+    });
+
+    ctx.beginPath();
+    points.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.closePath();
+    ctx.fillStyle = color + '22';
+    ctx.fill();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Dots
+    points.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.fill();
+    });
+  });
+}
+
+function renderRecoList() {
+  document.getElementById('recoList').innerHTML = RECOMMENDATIONS.map((rec, i) => `
+    <div class="reco-card tier-${rec.tier}">
+      <div class="reco-header">
+        <span class="reco-brand">${rec.brand}</span>
+        <span class="reco-score">FIT ${rec.score}</span>
+      </div>
+      <div class="reco-tags">${rec.tags.map(t => `<span class="reco-tag">${t}</span>`).join('')}</div>
+      <div class="reco-rationale">${rec.rationale}</div>
+    </div>
+  `).join('');
+}
+
+function renderRadarLegend() {
+  const tiers = [
+    { tier: 1, label: 'High Priority' },
+    { tier: 2, label: 'Medium Priority' },
+    { tier: 3, label: 'Exploratory' }
+  ];
+  document.getElementById('radarLegend').innerHTML = tiers.map(t => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${TIER_COLORS[t.tier]}"></div>
+      ${t.label}
+    </div>
+  `).join('');
+}
+
+let activeFilter = 'All';
+let sortCol = null;
+let sortDir = 1;
+let activePromptIdx = null;
+
+function init() {
+  navigateTo('overview');
+}
+
+function navigateTo(section) {
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === section);
+  });
+  // Hide all sections
+  document.querySelectorAll('.page-section').forEach(el => el.style.display = 'none');
+  // Show target
+  const target = document.getElementById('section-' + section);
+  if (target) target.style.display = 'block';
+  // Init content
+  if (section === 'overview') {
+    renderStats();
+    renderPrompts();
+    renderBrandChart();
+    renderTypeChart();
+  } else if (section === 'data') {
+    renderFilters();
+    renderTable(PRODUCTS);
+  } else if (section === 'recommendations') {
+    drawRadar();
+    renderRecoList();
+    renderRadarLegend();
+  }
+}
+
+function renderStats() {
+  const bs = PRODUCTS.filter(p => p.Category === 'Best Sellers');
+  const sale = PRODUCTS.filter(p => p.Category === 'Sale');
+  const na = PRODUCTS.filter(p => p.Category === 'New Arrivals');
+  const avgPrice = (PRODUCTS.reduce((s,p) => s + (p['Price ($)'] || 0), 0) / PRODUCTS.length).toFixed(0);
+
+  const cards = [
+    { cls: 'bestsellers', value: bs.length, label: 'Best Sellers', sub: 'Active SKUs' },
+    { cls: 'sale', value: sale.length, label: 'On Sale', sub: 'Discounted items' },
+    { cls: 'new', value: na.length, label: 'New Arrivals', sub: 'Latest drops' },
+    { cls: 'total', value: '$' + avgPrice, label: 'Avg Price', sub: 'Across all products' },
+  ];
+
+  document.getElementById('statsRow').innerHTML = cards.map(c => `
+    <div class="stat-card ${c.cls}">
+      <div class="stat-label">${c.label}</div>
+      <div class="stat-value">${c.value}</div>
+      <div class="stat-sub">${c.sub}</div>
+    </div>
+  `).join('');
+}
+
+function renderPrompts() {
+  document.getElementById('promptGrid').innerHTML = PRESET_PROMPTS.map((p, i) => `
+    <button class="prompt-btn" id="pb${i}" onclick="selectPrompt(${i})">
+      <div class="prompt-btn-label">${p.label}</div>
+      <div class="prompt-btn-text">${p.text}</div>
+    </button>
+  `).join('');
+}
+
+function selectPrompt(i) {
+  activePromptIdx = i;
+  document.querySelectorAll('.prompt-btn').forEach((b, j) => {
+    b.classList.toggle('active', j === i);
+  });
+  runAnalysis();
+}
+
+function renderFilters() {
+  const filters = ['All', 'Best Sellers', 'Sale', 'New Arrivals'];
+  const clsMap = { 'Best Sellers': 'active', 'Sale': 'sale-active', 'New Arrivals': 'new-active' };
+  document.getElementById('filterRow').innerHTML = filters.map(f => `
+    <button class="filter-btn ${f === activeFilter ? (clsMap[f] || 'active') : ''}"
+      onclick="setFilter('${f}')">${f} (${f === 'All' ? PRODUCTS.length : PRODUCTS.filter(p=>p.Category===f).length})</button>
+  `).join('');
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  const filtered = f === 'All' ? PRODUCTS : PRODUCTS.filter(p => p.Category === f);
+  renderTable(filtered);
+}
+
+function renderTable(data) {
+  const cols = ['Product Name', 'Brand', 'Category', 'Product Type', 'Price ($)', 'On Sale', 'Badge'];
+
+  document.getElementById('tableHead').innerHTML = `<tr>${cols.map(c => `
+    <th onclick="sortBy('${c}')">${c}
+      <span class="sort-arrow ${sortCol===c?'active':''}">${sortCol===c?(sortDir>0?'↑':'↓'):'↕'}</span>
+    </th>`).join('')}</tr>`;
+
+  if (!data.length) {
+    document.getElementById('tableBody').innerHTML = '';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+
+  document.getElementById('tableBody').innerHTML = data.map(p => {
+    const catCls = p.Category === 'Best Sellers' ? 'cat-bestsellers' : p.Category === 'Sale' ? 'cat-sale' : 'cat-new';
+    const badgeCls = p.Badge && p.Badge.includes('Bestseller') ? 'badge-bestseller' : p.Category === 'Sale' ? 'badge-sale' : 'badge-new';
+    return `<tr>
+      <td><a class="product-link" href="${p.URL}" target="_blank">${p['Product Name']}</a></td>
+      <td>${p.Brand}</td>
+      <td><span class="cat-pill ${catCls}">${p.Category}</span></td>
+      <td>${p['Product Type'] || '—'}</td>
+      <td><span class="price-tag">$${p['Price ($)']}</span></td>
+      <td>${p['On Sale'] === 'Yes' ? '<span class="badge badge-sale">Yes</span>' : '—'}</td>
+      <td>${p.Badge ? `<span class="badge ${badgeCls}">${p.Badge}</span>` : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function sortBy(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+  const filtered = activeFilter === 'All' ? [...PRODUCTS] : PRODUCTS.filter(p => p.Category === activeFilter);
+  filtered.sort((a, b) => {
+    const av = a[col] ?? '', bv = b[col] ?? '';
+    if (typeof av === 'number') return (av - bv) * sortDir;
+    return String(av).localeCompare(String(bv)) * sortDir;
+  });
+  renderTable(filtered);
+}
+
+function renderBrandChart() {
+  const counts = {};
+  PRODUCTS.forEach(p => { counts[p.Brand] = (counts[p.Brand] || 0) + 1; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const max = sorted[0][1];
+  document.getElementById('brandChart').innerHTML = sorted.map(([brand, count]) => `
+    <div class="brand-row">
+      <div class="brand-name" title="${brand}">${brand}</div>
+      <div class="brand-bar-wrap"><div class="brand-bar" style="width:${(count/max*100).toFixed(0)}%"></div></div>
+      <div class="brand-count">${count}</div>
+    </div>`).join('');
+}
+
+function renderTypeChart() {
+  const counts = {};
+  PRODUCTS.forEach(p => { if (p['Product Type']) counts[p['Product Type']] = (counts[p['Product Type']] || 0) + 1; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0, 10);
+  const max = sorted[0][1];
+  document.getElementById('typeChart').innerHTML = sorted.map(([type, count]) => `
+    <div class="brand-row">
+      <div class="brand-name" title="${type}">${type}</div>
+      <div class="brand-bar-wrap"><div class="brand-bar" style="width:${(count/max*100).toFixed(0)}%;background:var(--olive)"></div></div>
+      <div class="brand-count">${count}</div>
+    </div>`).join('');
+}
+
+const ANALYSES = {
+  0: `Flint and Tinder is unambiguously Huckberry's house brand anchor — it accounts for 23 of 47 SKUs (49%) and owns both the Best Sellers and Sale pages almost entirely. The 12 bestselling SKUs are all F&T, spanning shirts ($98), pants ($108), denim ($118), and tees ($44). This concentration tells a clear story: Huckberry has vertically integrated around a single private-label brand to capture margin, control quality narrative, and build customer loyalty around American-made workwear aesthetics.
+
+Relwen is the clear #2 brand (10 SKUs) but plays a very different role — it dominates New Arrivals at a $190 average price, signaling that Huckberry is using Relwen to push upmarket and attract a higher-spend customer. The Pac-Away Shell ($338), Sailcloth Tanker Jacket ($288), and Flyweight Flex Blazer ($298) are all premium technical lifestyle pieces — a deliberate contrast to F&T's $44–$118 core.
+
+Wills (5 SKUs, all on sale) and third-party brands like Filson, Sperry, and Astorflex appear to serve a curation and discovery function — adding brand credibility and breadth without diluting the F&T core. The fact that Wills' entire visible footprint is on sale suggests it may be a brand Huckberry is cycling out or liquidating seasonally.`,
+
+  1: `The 47-SKU dataset spans a wide $17–$338 range, but clusters meaningfully into three pricing tiers that reveal deliberate strategy.
+
+The core sweet spot is $80–$130, where the majority of Best Sellers and Sale items live — Flint and Tinder's denim ($118), pants ($108), and oxford shirts ($98) anchor this band. These are "considered but accessible" price points: higher than fast fashion, lower than luxury, consistent with a customer who reads gear reviews before buying.
+
+The premium tier — Relwen's New Arrivals averaging $190 — is a clear upmarket push. Pieces like the Pac-Away Shell ($338) and Sailcloth Tanker Jacket ($288) compete with Arc'teryx and Patagonia. This signals Huckberry is targeting customers willing to spend on technical quality, not just aesthetic.
+
+The outlier low end on Sale ($17 beanie, $31 Wills polo) suggests true clearance items — liquidating seasonal or underperforming inventory rather than strategic discounting. The absence of original prices in the sale data makes it impossible to calculate true markdown depth, which is itself a margin visibility gap worth flagging.`,
+
+  2: `The sale page reveals a few patterns worth flagging from a planning and inventory perspective.
+
+Flint and Tinder dominates the sale page (11 of 22 SKUs), but critically, several of these are the same products that appear on Best Sellers — the 365 5-Pocket Pant and Stretch Selvedge Denim both show up in both sections in different colorways. This suggests color/variant over-buy rather than product misses: the core styles sell, but specific colors (Chocolate, Rinse) didn't clear at full price and are being discounted.
+
+The Wills brand has its entire visible assortment on sale — 5 SKUs including merino sweaters, a trench coat, and polo shirts ranging $31–$124. This concentration in a single brand suggests either a vendor relationship wind-down or a seasonal buy that didn't perform.
+
+The "Add'l 15% Off At Cart" badge on nearly every sale item is a notable pricing tactic — the listed price isn't the final price, meaning actual realized revenue per unit is lower than what's visible. Without original prices in the data, true discount depth is unknown, but this structure makes margin analysis difficult and is exactly the kind of gap a finance team should be tracking systematically.`,
+
+  3: `The contrast between Best Sellers and New Arrivals tells a clear story about where Huckberry is heading versus where they've been.
+
+Best Sellers are dominated by Flint and Tinder's American workwear core — oxford shirts, 5-pocket pants, selvedge denim, and vintage tees in the $44–$118 range. These are proven, replenishable basics with strong multi-color sell-through (the Oxford Draftsman Shirt has 3 colorways on the bestseller list). The customer here is buying quality essentials with a heritage feel.
+
+New Arrivals tell a different story. Relwen owns 8 of 10 new SKUs, with an average price of $190 — 60% higher than the Best Sellers average of $119. The Pac-Away Shell ($338), Sailcloth Tanker Jacket ($288), and Flyweight Flex Blazer ($298) are technical, premium, and versatile across outdoor and urban contexts. This is a deliberate push toward the "elevated outdoor lifestyle" customer — think less workwear, more premium adventure-ready.
+
+The Proof x Danner MTN45 Low sneaker collaboration ($220) and Proof training tee ($58) also signal growing investment in performance activewear, a category with strong DTC growth tailwinds. The strategic direction is clear: maintain the F&T core for volume and accessibility, while using Relwen and performance brands to attract a higher-LTV premium customer.`,
+
+  4: `Three margin opportunities stand out from this data.
+
+First, color/variant rationalization on Flint and Tinder. The same core products — Oxford Draftsman Shirt, 365 Pant, Vintage Tee — appear across 2–3 colorways each on Best Sellers, and different colorways of the same styles show up on Sale. A tighter color buy on proven styles would reduce markdown risk without sacrificing topline, since customers are buying the product, not the specific color.
+
+Second, Wills brand exposure. All 5 visible Wills SKUs are on sale, spanning $31–$124. If this brand isn't being actively grown, the inventory carrying cost and markdown cadence is a drag on margin. A clear decision — double down or wind down — would improve capital efficiency.
+
+Third, sale price transparency. Nearly every sale item carries "Add'l 15% Off At Cart," meaning the displayed price overstates actual revenue. If the finance team is forecasting off listed sale prices rather than realized cart prices, that's a systematic revenue overstatement. Building a dashboard that captures realized vs. listed price would immediately improve forecast accuracy — and is exactly the kind of AI-powered automation this role is meant to build.`,
+
+  5: `▸ Flint and Tinder drives the business. 49% of visible SKUs, 100% of Best Sellers, and the majority of Sale inventory are F&T — confirming it as the core revenue engine. Variant-level color over-buys appear to be the primary driver of markdowns, not product misses.
+
+▸ Relwen signals a deliberate upmarket shift. New Arrivals average $190 vs. $119 for Best Sellers, with Relwen owning 8 of 10 new SKUs. The premium technical lifestyle positioning (Pac-Away Shell at $338, Sailcloth Tanker at $288) targets a higher-LTV customer and represents a meaningful strategic bet on margin expansion.
+
+▸ Margin visibility has gaps. Sale items display listed prices with an additional 15% off applied at cart — meaning realized revenue is systematically lower than what's visible in the product data. Original prices are largely absent, making true markdown depth unquantifiable from this dataset. Closing this data gap should be a near-term finance priority.`
+};
+
+function typewriterEffect(text, element, speed) {
+  element.textContent = '';
+  let i = 0;
+  const interval = setInterval(() => {
+    element.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, speed || 6);
+}
+
+function runAnalysis() {
+  if (activePromptIdx === null) return;
+  const question = PRESET_PROMPTS[activePromptIdx].text;
+
+  const panel = document.getElementById('responsePanel');
+  const body = document.getElementById('responseBody');
+  const dot = document.getElementById('responseDot');
+  const label = document.getElementById('responseLabel');
+
+  panel.classList.add('visible');
+  body.textContent = '';
+  dot.classList.remove('done');
+  label.textContent = 'Claude is analyzing...';
+
+  const presetMatch = PRESET_PROMPTS.findIndex(p => p.text === question);
+  const responseText = (presetMatch >= 0 && ANALYSES[presetMatch])
+    ? ANALYSES[presetMatch]
+    : 'Select one of the 6 preset prompts above to see a pre-generated analysis of this Huckberry product data.';
+
+  setTimeout(() => {
+    dot.classList.add('done');
+    label.textContent = 'Analysis complete';
+    typewriterEffect(responseText, body, 6);
+  }, 700);
+}
+
+init();
+
+init();
+</script>
+</body>
+</html>
